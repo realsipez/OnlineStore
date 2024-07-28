@@ -1,8 +1,9 @@
 server:
   port: 8081
+
 spring:
   application:
-    name: Product
+    name: product
   datasource:
     url: jdbc:mysql://localhost:3306/product
     username: Sina
@@ -13,6 +14,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+
 eureka:
   client:
     service-url:
