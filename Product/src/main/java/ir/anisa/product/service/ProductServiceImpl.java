@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 @Service
@@ -36,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
         CouponDTO couponDTO = discountClient.findByCouponCode(productDTO.getCode());
         if (Objects.nonNull(couponDTO)) {
             BigDecimal subtract = new BigDecimal("100").subtract(couponDTO.getDiscount());
-            product.setPrice(subtract.multiply(product.getPrice()).divide(new BigDecimal("100")));
+            product.setPrice(subtract.multiply(product.getPrice()).divide(new BigDecimal("100"), RoundingMode.UP));
         }
         Product savedProduct = productRepository.save(product);
         notificationClient.sendNotification(new NotificationDTO(savedProduct.getId(), String.format("product with id %s saved", savedProduct.getId())));
