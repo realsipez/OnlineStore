@@ -1,1 +1,1 @@
-# A practice project using Microservice architecture
+# An online store backend system based on microservice architecture

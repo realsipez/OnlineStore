@@ -1,0 +1,91 @@
+version: "3.3"
+services:
+  db:
+    image: mysql
+    container_name: mysqlDB
+    ports:
+      - "3307:3307"
+    expose:
+      - 3307
+    volumes:
+      - my-db:/var/lib/mysql
+    environment:
+      MYSQL_USER: Sina
+      MYSQL_PASSWORD: abcd1234
+      MYSQL_ROOT_PASSWORD: Sp@123456789
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  gateway:
+    image: gateway
+    container_name: gateway
+    ports:
+      - "7070:7070"
+
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  eureka:
+    image: openjdk:17-jdk-alpine
+    entrypoint: java -jar Eureka-1.0.0.jar
+    ports:
+      - "8761:8761"
+    container_name: eureka
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+
+  product:
+    image: product
+    ports:
+      - "8081:8081"
+    container_name: product
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+
+  discount:
+    image: payment
+    ports:
+      - "8082:8082"
+    container_name: payment
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+
+  notification:
+    image: order
+    ports:
+      - "8080:8080"
+    container_name: order
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  clients:
+    image: client
+    ports:
+      - "8084:8084"
+    container_name: client
+    depends_on: [ eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+volumes:
+  my-db:
