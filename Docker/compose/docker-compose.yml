@@ -16,60 +16,80 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512m
-
-  gateway:
-    image: gateway
-    container_name: gateway
-    ports:
-      - "7070:7070"
-
-    deploy:
-      resources:
-        limits:
-          memory: 512m
+          memory: 512
 
   eureka:
-    image: openjdk:17-jdk-alpine
+    build: ../../Eureka
     entrypoint: java -jar Eureka-1.0.0.jar
     ports:
       - "8761:8761"
     container_name: eureka
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
     deploy:
       resources:
         limits:
           memory: 512m
 
+  gateway:
+    build: ../../Gateway
+    container_name: gateway
+    ports:
+      - "7070:7070"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [ eureka ]
+    networks:
+      - OnlineStore
+    deploy:
+      resources:
+        limits:
+          memory: 512m
 
   product:
-    image: product
+    build: ../../Product
     ports:
       - "8081:8081"
     container_name: product
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+      - database
     depends_on: [ db, eureka ]
     deploy:
       resources:
         limits:
           memory: 512m
 
-
   discount:
-    image: payment
+    build: ../../Payment
     ports:
       - "8082:8082"
     container_name: payment
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+      - database
     depends_on: [ db, eureka ]
     deploy:
       resources:
         limits:
           memory: 512m
 
-
   notification:
-    image: order
+    build: ../../Order
     ports:
       - "8080:8080"
     container_name: order
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+      - database
     depends_on: [ db, eureka ]
     deploy:
       resources:
@@ -77,10 +97,15 @@ services:
           memory: 512m
 
   clients:
-    image: client
+    build: ../../Client
     ports:
       - "8084:8084"
     container_name: client
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+      - database
     depends_on: [ eureka ]
     deploy:
       resources:
@@ -89,3 +114,10 @@ services:
 
 volumes:
   my-db:
+
+networks:
+  default:
+  OnlineStore:
+    driver: bridge
+  database:
+    external: true
