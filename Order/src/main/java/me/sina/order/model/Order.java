@@ -14,4 +14,5 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String code;
+    private String totalPrice;
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/discount")
+@RequestMapping("/api/v1/payment/discount")
 public class DiscountController {
 
     private final DiscountService discountService;

@@ -1,0 +1,14 @@
+spring:
+  rabbitmq:
+    addresses: localhost:5672
+
+server:
+  port: 8085
+
+rabbitmq:
+  exchange:
+    internal: product-exchange
+  queue:
+    notification: notification.queue
+  routing-key:
+    internal-notification: product.notification.routing-key
