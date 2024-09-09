@@ -1,6 +1,6 @@
 package me.sina.order.service;
 
-import me.sina.client.payment.discount.PaymentClient;
+import me.sina.client.rest.payment.discount.PaymentClient;
 import me.sina.order.dto.OrderDTO;
 import me.sina.order.model.Order;
 import me.sina.order.repository.OrderRepository;

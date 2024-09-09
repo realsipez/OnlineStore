@@ -108,21 +108,6 @@ services:
         limits:
           memory: 512m
 
-  notification:
-    build: Notification
-    ports:
-      - "8084:8084"
-    container_name: Notification
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - OnlineStore
-    depends_on: [ eureka ]
-    deploy:
-      resources:
-        limits:
-          memory: 512m
-
 volumes:
   my-db:
 
